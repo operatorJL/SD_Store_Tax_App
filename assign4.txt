@@ -1,0 +1,96 @@
+Assignment 4 Due 11:59PM Nov. 27th
+
+A store sells different kinds of products. For each product, the store
+has to apply sales tax. The tax they apply for each item depends on 
+two things.
+
+A. the residence of the customer
+B. any waiver or reduction in tax for a particular product, for example
+souvenirs have a lowered rate of 0.1% in some tax areas but not others.
+
+The application that fulfills the order right now only handles sales of
+two products and two taxation areas.
+
+class TShirt {
+  public double getPrice(TaxArea taxArea) {
+	  return salesPrice + salesPrice * taxArea.rate();
+  }
+}
+
+class Souvenir {
+  public double getPrice(TaxArea taxArea) {
+    double reduction = 0;
+    if (taxArea instanceof TXTaxArea)
+     reduction = 0.1;
+
+	return salesPrice + salesPrice * (taxArea.rate() - reduction);
+  }
+}
+
+The store wants you to enhance the software so that
+
+A. more types of items can be included
+
+B. more tax areas can be supported
+
+They want you to redesign so that once you're done, no code has to change
+(but small new code can be added) to accommodate a new tax area or new
+type of item for sale.
+
+Write a class that will accept a list of items and compute the total
+price (items are still responsible for returning their total price
+including tax). Test it with one or two items and tax areas. Once you're done,
+try adding a new tax area and a new item and ensure no code change is
+necessary.
+
+
+1. Explain what design principles are being violated by the original design.
+	
+	The design principles that are being violated in the Souvenir Class are LSP and OCP. 
+	It violates LSP since getPrice is checking for which instance of the TaxArea is being used at the time. The child classes should be substitutable when the base class is being used. It violates OCP because if new tax areas were to be added, the class would have to be modified to accept the new tax area.  
+
+	The design principle that is being violated in the Tshirt Class is DRY. To be able to add more items, an Item base class should be created. This would help in changing the pricing scheme to conform to the common closure principle, that is, when the change is done it is done efficiently and in one place. 
+
+2. Redesign and reimplement the code to fix those issues.
+
+3. Explain what design principles you are using in your solution.
+
+	DRY		
+		In order to not violate DRY we have our calculate_price method calling a get_reduction
+		method that will return the reduction amount if it is found and zero if it is not.  This
+		way we do not have to create two methods that basically do the same calculation, and
+		we do not burden the calculate_total or get_collection_of_prices with finding the 
+		reduction. 
+	SRP
+		We use SRP in check_if_item_has_reduction by checking if a reduction is in the
+		collection of items and their reduction locations.  calculate_price totals up the 
+		price of the item, tax, and calls get_reduction to find the amount if any.  
+		get_collection_of_prices goes through the items and returns a collection of calculated
+		prices.  calculate_total gets the prices from the get_collection_of_prices and totals
+		them and only returns zero if an exception is thrown.  And get_reduction uses the
+		check_if_item_has_reduction method and returns the reduction amount if found and zero
+		if it is not found.
+	OCP
+	 It is OCP because if a new item, tax area, or reduction is needed we do not have to open
+	 the class to make those changes. 
+	 
+4. What design pattern are you using?
+
+	Iterator Pattern
+		We use an internal iterator in the get_collection_of_prices to go through the list
+		of items and retrieve the calculated prices.  By using the internal iterator, we do
+		not care what type of collection we are iterating over or how large the collection is 
+		and we only deal with the object at hand.  
+		
+
+
+
+
+Total [100]: 100
+
+Program runs [20]:
+Test quality [20]:
+Test Coverage [10]:
+Code quality [10]:
+Design quality [20]:
+Response to questions [20]:
